@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pravin Sundar — Senior Data Scientist</title>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1724;        /* dark bg */
+    --card:#0b1220;
+    --muted:#94a3b8;
+    --accent:#60a5fa;
+    --accent-2:#7c3aed;
+    --glass: rgba(255,255,255,0.03);
+    --text:#e6eef8;
+    --success:#10b981;
+  }
+  /* Light theme vars */
+  :root.light {
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --muted:#475569;
+    --accent:#0b6ef6;
+    --accent-2:#6b21a8;
+    --glass: rgba(0,0,0,0.03);
+    --text:#0b1220;
+    --success:#0f9d58;
+  }
+
+  html,body{height:100%; margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  body{background:linear-gradient(180deg,var(--bg), #08111a 200%); color:var(--text); padding:28px; box-sizing:border-box;}
+  .wrap{max-width:1000px; margin:0 auto; display:grid; grid-template-columns: 1fr 360px; gap:24px;}
+
+  /* Header card */
+  .header{
+    grid-column: 1 / span 2;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border:1px solid rgba(255,255,255,0.04);
+    border-radius:12px;
+    padding:20px 22px;
+    display:flex; gap:18px; align-items:center;
+  }
+  .avatar{
+    width:92px; height:92px; border-radius:12px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:28px; color:white;
+  }
+  .profile{
+    flex:1;
+  }
+  .name{font-size:22px; font-weight:700; margin:0}
+  .sub{color:var(--muted); margin:6px 0 0; font-size:14px}
+  .contact{margin-top:10px; color:var(--muted); font-size:13px}
+  .contact a{color:var(--accent); text-decoration:none}
+
+  /* Left column (main) */
+  .card{
+    background:var(--card);
+    border-radius:10px;
+    padding:16px;
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 6px 18px rgba(3,6,15,0.5);
+  }
+  h3{margin:0 0 10px 0; color:var(--accent); font-size:16px}
+  p.lead{color:var(--muted); margin:6px 0 12px; font-size:13px}
+
+  /* Experience list */
+  .job{
+    margin-bottom:12px; border-left:4px solid rgba(255,255,255,0.02); padding:10px 12px;
+  }
+  .job .meta{display:flex; justify-content:space-between; gap:12px; align-items:center}
+  .title{font-weight:700; font-size:15px}
+  .period{color:var(--muted); font-size:13px}
+
+  /* Highlight badges */
+  .badge{display:inline-block; padding:6px 9px; border-radius:8px; background:var(--glass); color:var(--text); font-weight:600; margin-right:8px; font-size:13px; border:1px solid rgba(255,255,255,0.03)}
+
+  /* Collapsible details */
+  .collapsible {
+    margin-top:10px;
+  }
+  .collapsible button {
+    width:100%;
+    text-align:left;
+    background:transparent;
+    border:none;
+    color:var(--accent);
+    font-weight:700;
+    padding:8px 0;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .collapsible .content{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height .28s ease;
+    color:var(--muted);
+    font-size:14px;
+    padding-left:8px;
+  }
+  .content.open{ padding-top:8px; }
+
+  /* Right column */
+  .right{display:flex; flex-direction:column; gap:16px;}
+  .skills-grid{display:flex; flex-wrap:wrap; gap:8px}
+  .skill-pill{background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent); padding:7px 10px; border-radius:999px; font-weight:600; color:var(--text); font-size:13px; border:1px solid rgba(255,255,255,0.03)}
+
+  /* charts */
+  canvas{background:transparent; display:block; width:100% !important; height:220px !important;}
+
+  /* toggle & footer */
+  .controls{display:flex; gap:10px; align-items:center; justify-content:flex-end;}
+  .toggle {
+    background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer; color:var(--muted);
+  }
+
+  @media (max-width:980px){
+    .wrap{grid-template-columns: 1fr; padding-bottom:40px}
+    .header{flex-direction:row}
+    .controls{justify-content:flex-start}
+  }
+
+  /* Print-friendly */
+  @media print{
+    body{background: #fff; color:#000}
+    .header, .card{box-shadow:none; border:none; background:transparent}
+    .wrap{grid-template-columns: 1fr}
+  }
+</style>
+</head>
+<body>
+
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="controls" style="margin-bottom:12px;">
+    <div style="flex:1"></div>
+    <button id="themeToggle" class="toggle" title="Toggle light / dark">Switch theme</button>
+    <button id="downloadPdf" class="toggle" title="Use browser Print -> Save as PDF">Save as PDF</button>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="avatar">PS</div>
+      <div class="profile">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div>
+            <h1 class="name">Pravin Sundar</h1>
+            <div class="sub">Senior Data Scientist — ML systems, NLP, product analytics, and experimental design</div>
+            <div class="contact">Bangalore, India • <a href="mailto:pravinsundar1993@gmail.com">pravinsundar1993@gmail.com</a> • +91 9500129289 • <a href="https://www.linkedin.com/in/pravin-sundar/" target="_blank">linkedin.com/in/pravin-sundar</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Left column: main content -->
+    <div>
+      <!-- Summary -->
+      <div class="card">
+        <h3>Profile</h3>
+        <p class="lead">
+          Results-driven Senior Data Scientist with experience building production ML systems (NLP & tabular), designing experimentation frameworks, and delivering business impact at scale for automotive & financial products. Strong background in model deployment, stakeholder-facing analytics, and mentoring technical teams.
+        </p>
+
+        <h3 style="margin-top:12px">Selected Projects (click to expand)</h3>
+
+        <!-- Project 1 -->
+        <div class="job">
+          <div class="meta">
+            <div class="title">GPT-powered Driver Extraction (NPS call analytics)</div>
+            <div class="period">Scienaptic — Jul 2022–Present</div>
+          </div>
+          <div style="margin-top:8px;">
+            <span class="badge">NLP • Production</span>
+            <span class="badge">STT • GPT</span>
+            <span class="badge">Customer Insights</span>
+          </div>
+
+          <div class="collapsible">
+            <button aria-expanded="false" onclick="toggleCollapse(this)">▶️ View details</button>
+            <div class="content" aria-hidden="true">
+              <div>
+                <ul>
+                  <li>Built a pipeline: STT (fine-tuned) → Translate (Azure) → GPT-based extractor to derive multi-level drivers from NPS calls.</li>
+                  <li>Delivered structured driver outputs that enabled dealerships to prioritize interventions; integrated outputs into dashboards used by operations teams.</li>
+                  <li>Focused on explainability and annotation-friendly outputs so human reviewers can validate and refine driver taxonomy.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="job">
+          <div class="meta">
+            <div class="title">DSE Churn Prediction — 2W Manufacturing</div>
+            <div class="period">Scienaptic — Jul 2022–Present</div>
+          </div>
+          <div style="margin-top:8px;">
+            <span class="badge">Retention • LightGBM</span>
+            <span class="badge">80%+ Accuracy</span>
+            <span class="badge">Feature Engineering</span>
+          </div>
+
+          <div class="collapsible">
+            <button aria-expanded="false" onclick="toggleCollapse(this)">▶️ View details</button>
+            <div class="content" aria-hidden="true">
+              <div>
+                <ul>
+                  <li>Designed features from performance, engagement and demographic signals; used time-windowed aggregation to capture behavior shifts.</li>
+                  <li>Deployed model to scoring pipeline; results used to design targeted retention plays that reduced observed churn.</li>
+                  <li>Created explainability reports per employee using SHAP to help HR & regional managers implement interventions.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="job">
+          <div class="meta">
+            <div class="title">Retail Propensity Model (Lead Scoring)</div>
+            <div class="period">Scienaptic — Jul 2022–Present</div>
+          </div>
+          <div style="margin-top:8px;">
+            <span class="badge">LightGBM</span><span class="badge">Conversion Lift</span>
+          </div>
+
+          <div class="collapsible">
+            <button aria-expanded="false" onclick="toggleCollapse(this)">▶️ View details</button>
+            <div class="content" aria-hidden="true">
+              <div>
+                <ul>
+                  <li>Classified digital inquiries into hot/warm/cold using LightGBM and calibrated probability buckets for confident prioritization.</li>
+                  <li>Worked with product & sales to integrate scores into CRM workflows—improved follow-up efficiency and conversion rates.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projects summary / more -->
+        <div style="margin-top:10px; color:var(--muted); font-size:13px;">
+          Also: Streamlit app for territory recommendations, lookalike modeling for ad campaigns, topic modeling + sentiment analysis using BERT for service comments.
+        </div>
+
+      </div>
+
+      <!-- Experience and Education -->
+      <div class="card" style="margin-top:14px;">
+        <h3>Experience & Education</h3>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px;">
+          <div>
+            <div class="title">Sr. Data Scientist — Scienaptic Systems</div>
+            <div class="period" style="margin-top:3px;color:var(--muted);">Jul 2022 – Present</div>
+            <div style="color:var(--muted);margin-top:8px;font-size:14px;">
+              Leading ML projects: production NLP, retention modelling and conversion scoring for enterprise clients.
+            </div>
+          </div>
+
+          <div>
+            <div class="title">Data Scientist — Scienaptic Systems</div>
+            <div class="period" style="margin-top:3px;color:var(--muted);">Jul 2020 – Jun 2022</div>
+            <div style="color:var(--muted);margin-top:8px;font-size:14px;">
+              Built lookalike models, Streamlit recommendation tool, and dashboards in Apache Superset.
+            </div>
+          </div>
+
+          <div>
+            <div class="title">Data Scientist Intern — Syapse Inc.</div>
+            <div class="period" style="margin-top:3px;color:var(--muted);">Jun 2019 – Aug 2019</div>
+          </div>
+
+          <div>
+            <div class="title">Data Analyst — Fractal Analytics</div>
+            <div class="period" style="margin-top:3px;color:var(--muted);">Aug 2015 – Jun 2018</div>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.04);margin:12px 0;">
+
+        <div>
+          <div class="title">Education</div>
+          <div class="period" style="margin-top:4px;color:var(--muted);">Master’s in Data Science — Indiana University, Bloomington (May 2020)</div>
+          <div class="period" style="margin-top:2px;color:var(--muted);">B.Tech — Amrita Vishwa Vidyapeetham (May 2015)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right column: sidebar -->
+    <div class="right">
+      <div class="card">
+        <h3>Skills & Tools</h3>
+        <div style="margin:10px 0 12px;color:var(--muted);font-size:14px;">
+          Languages, frameworks, and platforms I use frequently.
+        </div>
+        <div class="skills-grid">
+          <div class="skill-pill">Python</div><div class="skill-pill">PySpark</div><div class="skill-pill">SQL</div>
+          <div class="skill-pill">R</div><div class="skill-pill">LightGBM</div><div class="skill-pill">TensorFlow</div>
+          <div class="skill-pill">Keras</div><div class="skill-pill">Azure Databricks</div><div class="skill-pill">Streamlit</div>
+          <div class="skill-pill">Apache Superset</div><div class="skill-pill">Tableau</div><div class="skill-pill">BERT</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <canvas id="skillChart" aria-label="Skills chart" role="img"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Impact Highlights</h3>
+        <ul style="color:var(--muted); margin-top:8px; line-height:1.6; font-size:14px;">
+          <li><strong>80%+ accuracy</strong> in DSE churn prediction used by regional HR teams.</li>
+          <li><strong>Lead scoring</strong> increased follow-up efficiency and conversion prioritization.</li>
+          <li><strong>Operationalized NLP</strong> pipeline to extract multi-level drivers from calls for dealer interventions.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Quick Links</h3>
+        <div style="color:var(--muted);margin-top:8px;font-size:14px;">
+          <div style="margin-bottom:8px;"><a href="https://www.linkedin.com/in/pravin-sundar/" target="_blank" style="color:var(--accent);text-decoration:none;">LinkedIn</a></div>
+          <div style="margin-bottom:8px;"><a href="mailto:pravinsundar1993@gmail.com" style="color:var(--accent);text-decoration:none;">Email</a></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div style="text-align:center;margin-top:18px;color:var(--muted);font-size:13px;">
+    Tip: Expand project details to reveal technical approach, metrics, and business outcome. Use browser Print → Save as PDF to generate a shareable PDF.
+  </div>
+</div>
+
+<script>
+  // Theme toggle: toggles light class on :root
+  const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  // Initialize from localStorage
+  let isLight = localStorage.getItem('pravin_theme') === 'light';
+  if(isLight) root.classList.add('light');
+
+  themeToggle.addEventListener('click', () => {
+    isLight = !root.classList.contains('light');
+    if(isLight){
+      root.classList.add('light');
+      localStorage.setItem('pravin_theme','light');
+    } else {
+      root.classList.remove('light');
+      localStorage.setItem('pravin_theme','dark');
+    }
+  });
+
+  // Collapsible toggles
+  function toggleCollapse(btn){
+    const content = btn.nextElementSibling;
+    const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+    if(isOpen){
+      content.style.maxHeight = null;
+      content.classList.remove('open');
+      content.setAttribute('aria-hidden','true');
+      btn.innerText = '▶️ View details';
+      btn.setAttribute('aria-expanded','false');
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      content.classList.add('open');
+      content.setAttribute('aria-hidden','false');
+      btn.innerText = '🔽 Hide details';
+      btn.setAttribute('aria-expanded','true');
+    }
+  }
+
+  // Skills chart data (visual emphasis)
+  const ctx = document.getElementById('skillChart').getContext('2d');
+  const skillChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Python', 'ML Engineering', 'NLP', 'Spark', 'SQL', 'Model Ops', 'Experimentation'],
+      datasets: [{
+        label: 'Skill strength (you can mention % in interview)',
+        data: [90,85,88,80,86,82,84],
+        fill: true,
+        backgroundColor: 'rgba(96,165,250,0.12)',
+        borderColor: 'rgba(96,165,250,0.9)',
+        pointBackgroundColor: 'rgba(96,165,250,0.9)',
+        pointBorderColor: '#fff',
+        pointHoverRadius:6,
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          beginAtZero: true,
+          suggestedMin: 20,
+          suggestedMax: 100,
+          ticks: { display:false },
+          grid: { color: 'rgba(255,255,255,0.03)' },
+          angleLines: { color:'rgba(255,255,255,0.03)' },
+          pointLabels: { color: getComputedStyle(document.documentElement).getPropertyValue('--muted') || '#94a3b8' }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+
+  // Download PDF helper (instructs user to use browser print)
+  document.getElementById('downloadPdf').addEventListener('click', ()=>{
+    alert('To save as PDF: use your browser menu → Print → Save as PDF (recommended: A4 or Letter). For best results choose "Background graphics" in print settings.');
+  });
+
+  // Ensure collapsible panels are accessible on load (closed)
+  document.querySelectorAll('.collapsible .content').forEach(function(c){ c.style.maxHeight = null; c.setAttribute('aria-hidden','true'); });
+</script>
+
+</body>
+</html>
